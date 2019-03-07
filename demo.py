@@ -28,8 +28,8 @@ def normalize_depth_for_display(depth, pc=95, crop_percent=0, normalizer=None, c
 if __name__ == '__main__':
     img_height=128
     img_width=416
-    ckpt_file = 'models/model-100280'
-    fh = open('misc/sample.png', 'r')
+    ckpt_file = 'ckpt/model-250000'
+    fh = open('data/example.png', 'r')
     I = pil.open(fh)
     I = I.resize((img_width, img_height), pil.ANTIALIAS)
     I = np.array(I)
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     saver = tf.train.Saver([var for var in tf.model_variables()]) 
     with tf.Session() as sess:
         saver.restore(sess, ckpt_file)
-        pred = system.inference(I[None,:,:,:], sess, mode='depth')
+        pred = system.inference(sess, mode='depth', inputs=I[None,:,:,:])
     
     plt.figure(figsize=(15,15))
     plt.subplot(1,2,1)

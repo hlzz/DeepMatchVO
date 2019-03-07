@@ -13,15 +13,24 @@ Implementation of ICRA 2019 paper: [Beyond Photometric Loss for Self-Supervised 
 # Environment
 This codebase is tested on Ubuntu 16.04 with Tensorflow 1.7 and CUDA 9.0.
 
-# Pre-trained Models
+# Demo
+## Download Pre-trained Models
 Download the [models](https://drive.google.com/file/d/1xWNm9MclJHD729uS6U6k2Oopn--Vnban/view?usp=sharing) presented in the paper, and then unzip them into the `ckpt` folder under the root.
+
+## Run a Simple Script
+After download the model, you can run a simple demo to make sure the setup is correct.
+```bash
+python demo.py
+```
+The output is shown below
+<img src='data/demo_result.png'>
 
 # Generate Train and Test Data
 Given that you have already downloaded the [KITTI](http://www.cvlibs.net/datasets/kitti/) odometry and raw datasets, the provided python script `data/prepare_train_data.py` is able to generate the training data with SIFT feature matches. Yet, the feature and match files are in accord with our internal format, which are not publicly available at this point. Alternatively, we suggest first generating the concatenated image triplets by
 
 ```bash
 # for odometry dataset
-python data/prepare_train_data.py --dataset_dir=$kitti_raw_odom --dataset_name=kitti_odom --dump_root=$kitti_odom_match3 --seq_length=3 --img_width=416 --img_height=128 --num_threads=8 --generate_test True
+python data/prepare_train_data.py --dataset_dir=$kitti_raw_odom --dataset_name=kitti_odom --dump_root=$kitti_odom_match3 --seq_length=3 --img_width=416 --img_height=128 --num_threads=8
 ```
 where `$kitti_raw_odom` and `$kitti_odom_match3` are the input odometry dataset and output files for training. Some example input paths (on my machine) are shown in `command.sh`.
 
