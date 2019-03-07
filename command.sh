@@ -19,6 +19,16 @@ checkpoint_dir=./ckpt/
 # kitti eval depth
 depth_pred_file='output/model-'$model_idx'.npy' 
 
+# Generate training and testing data
+## for odometry dataset
+python data/prepare_train_data.py --dataset_dir=$kitti_raw_odom --dataset_name=kitti_odom \
+    --dump_root=$kitti_odom_match3 --seq_length=3 --img_width=416 --img_height=128 \
+    --num_threads=8 --generate_test True
+## for raw dataset (Eigen split)
+python data/prepare_train_data.py --dataset_dir=$kitti_raw_dir --dataset_name=kitti_raw_eigen \
+    --dump_root=$kitti_raw_dump_dir --seq_length=3 --img_width=416 --img_height=128 \
+    --num_threads=8 --match_num $match_num
+
 # Train on KITTI odometry dataset
 match_num=100
 python train.py --dataset_dir=$kitti_odom_match3 --checkpoint_dir=$checkpoint_dir --img_width=416 --img_height=128 --batch_size=4 --seq_length 3 \
@@ -46,4 +56,3 @@ do
     python test_kitti_pose.py --test_seq $seq_num --dataset_dir $kitti_raw_odom --output_dir $output_folder'/'$seq_num'/' --ckpt_file $pose_ckpt_file --seq_length $sl --concat_img_dir $kitti_odom_match3
     python kitti_eval/eval_pose.py --gtruth_dir=$root_folder'kitti_eval/pose_data/ground_truth/seq'$sl'/'$seq_num/  --pred_dir=$output_folder'/'$seq_num'/'
 done
-echo 'round '$r' finished'
