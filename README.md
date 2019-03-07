@@ -14,10 +14,10 @@ Implementation of ICRA 2019 paper: [Beyond Photometric Loss for Self-Supervised 
 This codebase is tested on Ubuntu 16.04 with Tensorflow 1.7 and CUDA 9.0.
 
 # Demo
-## Download Pre-trained Models
+### Download Pre-trained Models
 Download the [models](https://drive.google.com/file/d/1xWNm9MclJHD729uS6U6k2Oopn--Vnban/view?usp=sharing) presented in the paper, and then unzip them into the `ckpt` folder under the root.
 
-## Run a Simple Script
+### Run a Simple Script
 After download the model, you can run a simple demo to make sure the setup is correct.
 ```bash
 python demo.py
