@@ -75,8 +75,9 @@ do
 done
 ```
 
-It outputs the same result in the paper.
-| Seq	  | ATE mean | std    |
+It outputs the same result in the paper:
+
+| Seq     | ATE mean | std    |
 |---------|----------|--------|
 | 09      | 0.0089   | 0.0054 |
 | 10      | 0.0084   | 0.0071 |
