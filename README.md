@@ -18,7 +18,7 @@ This codebase is tested on Ubuntu 16.04 with Tensorflow 1.7 and CUDA 9.0.
 Download the [models](https://drive.google.com/file/d/1xWNm9MclJHD729uS6U6k2Oopn--Vnban/view?usp=sharing) presented in the paper, and then unzip them into the `ckpt` folder under the root.
 
 ### Run a Simple Script
-After download the model, you can run a simple demo to make sure the setup is correct.
+After downloading the model, you can run a simple demo to make sure the setup is correct.
 ```bash
 python demo.py
 ```
@@ -46,7 +46,7 @@ python train.py --dataset_dir=$kitti_odom_match3 --checkpoint_dir=$checkpoint_di
     --max_steps 300000 --save_freq 2000 --learning_rate 0.001 --num_scales 1 --init_ckpt_file $checkpoint_dir'model-'$model_idx --continue_train=True --match_num $match_num
 ```
 
-We suggest train from a pre-trained model, such as the ones we have provided in [models](https://drive.google.com/file/d/1xWNm9MclJHD729uS6U6k2Oopn--Vnban/view?usp=sharing). Also note that do not use the model trained on the KITTI odometry dataset (for pose evaluation) on depth evaluation, nor the model trained on the KITTI Eigen split on pose evaluation. Otherwise, you will get better but biased (train-on-test) results because test samples in one dataset have overlap with the training samples in another.
+We suggest training from a pre-trained model, such as the ones we have provided in [models](https://drive.google.com/file/d/1xWNm9MclJHD729uS6U6k2Oopn--Vnban/view?usp=sharing). Also note that do not use the model trained on the KITTI odometry dataset (for pose evaluation) on depth evaluation, nor the model trained on the KITTI Eigen split on pose evaluation. Otherwise, you will get better but biased (train-on-test) results because test samples in one dataset have overlap with the training samples in another.
 
 # Test
 To evaluate the depth and pose estimation performance in the paper, use 
@@ -58,7 +58,10 @@ depth_ckpt_file=$rootfolder$checkpoint_dir'model-'$r
 depth_pred_file='output/model-'$r'.npy' 
 python test_kitti_depth.py --dataset_dir $kitti_raw_dir --output_dir $output_folder --ckpt_file $depth_ckpt_file #--show
 python kitti_eval/eval_depth.py --kitti_dir=$kitti_raw_dir --pred_file $depth_pred_file #--show True --use_interp_depth True
+```
+You can also use `--show` option to visualize the depth maps.
 
+```bash
 # Testing pose model
 sl=3
 r=258000
@@ -71,7 +74,12 @@ do
     python kitti_eval/eval_pose.py --gtruth_dir=$root_folder'kitti_eval/pose_data/ground_truth/seq'$sl'/'$seq_num/  --pred_dir=$output_folder'/'$seq_num'/'
 done
 ```
-Note: there may be some missing files for training and testing. If you cannot work out the whole process, feel free to contact us.
+
+It outputs the same result in the paper.
+| Seq	  | ATE mean | std    |
+|---------|----------|--------|
+| 09      | 0.0089   | 0.0054 |
+| 10      | 0.0084   | 0.0071 |
 
 # Contact
 Feel free to contact me (Tianwei) if you have any questions, either by email or by issue.

@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 import cv2
 from deep_slam import DeepSlam
 from data_loader import DataLoader
-from common_utils import complete_batch_size
 
 flags = tf.app.flags
 flags.DEFINE_integer("batch_size", 4, "The size of of a sample batch")
@@ -38,7 +37,6 @@ def main(_):
     with open('data/kitti/test_files_eigen.txt', 'r') as f:
         test_files = f.readlines()
         test_files = [FLAGS.dataset_dir + t[:-1] for t in test_files]
-        #test_files = get_downsample_images(test_files, FLAGS.img_height, FLAGS.img_width, write_image=False)
     if not os.path.exists(FLAGS.output_dir):
         os.makedirs(FLAGS.output_dir)
     basename = os.path.basename(FLAGS.ckpt_file)

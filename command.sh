@@ -12,7 +12,6 @@ kitti_raw_odom=$kitti_dir'/odometry/dataset/odometry/'
 cityscapes_dir='/home/tianwei/Data/cityscapes'
 cityscapes_dump='/home/tianwei/Data/cityscapes/dump/'
 output_folder=./output/
-root_folder='./'
 model_idx=258000
 save_freq_step=4000
 checkpoint_dir=./ckpt/ 
@@ -40,7 +39,7 @@ python train.py --dataset_dir=$kitti_raw_dump_dir --checkpoint_dir=$checkpoint_d
 
 # Testing depth model
 r=250000
-depth_ckpt_file=$rootfolder$checkpoint_dir'model-'$r
+depth_ckpt_file=$checkpoint_dir'model-'$r
 depth_pred_file='output/model-'$r'.npy' 
 python test_kitti_depth.py --dataset_dir $kitti_raw_dir --output_dir $output_folder --ckpt_file $depth_ckpt_file #--show
 python kitti_eval/eval_depth.py --kitti_dir=$kitti_raw_dir --pred_file $depth_pred_file #--show True --use_interp_depth True
@@ -48,11 +47,11 @@ python kitti_eval/eval_depth.py --kitti_dir=$kitti_raw_dir --pred_file $depth_pr
 # Testing pose model
 sl=3
 r=258000
-pose_ckpt_file=$root_folder$checkpoint_dir'model-'$r
+pose_ckpt_file=$checkpoint_dir'model-'$r
 for seq_num in 09 10
 do 
     rm -rf $output_folder/$seq_num/
     echo 'seq '$seq_num
     python test_kitti_pose.py --test_seq $seq_num --dataset_dir $kitti_raw_odom --output_dir $output_folder'/'$seq_num'/' --ckpt_file $pose_ckpt_file --seq_length $sl --concat_img_dir $kitti_odom_match3
-    python kitti_eval/eval_pose.py --gtruth_dir=$root_folder'kitti_eval/pose_data/ground_truth/seq'$sl'/'$seq_num/  --pred_dir=$output_folder'/'$seq_num'/'
+    python kitti_eval/eval_pose.py --gtruth_dir='kitti_eval/pose_data/ground_truth/seq'$sl'/'$seq_num/  --pred_dir=$output_folder'/'$seq_num'/'
 done

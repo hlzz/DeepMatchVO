@@ -1,4 +1,9 @@
 #!/usr/bin/python
+# Tianwei Shen, HKUST, 2019.
+# Copyright reserved.
+# This file is an example to parse the feature and matching file,
+# in accord with our internal format.
+
 from __future__ import print_function
 
 import os
@@ -9,16 +14,44 @@ import math
 from struct import unpack
 from PIL import Image, ImageDraw
 
-CURDIR = os.path.dirname(__file__)
-sys.path.append(os.path.abspath(os.path.join(CURDIR, '.')))
-sys.path.append(os.path.abspath(os.path.join(CURDIR, '..')))
-from tools.io import read_feature_repo
+# REPLACE these paths with yours
+sift_list_path = '/home/tianwei/Data/kitti/odometry/dataset/odometry/sequences/00/sift_list.txt'
+match_folder = '/home/tianwei/Data/kitti/odometry/dataset/odometry/sequences/00/match'
 
-#sift_list_path = '/home/tianwei/Data/kitti/odometry/dataset/odometry/sequences/00/sift_list.txt'
-#match_folder = '/home/tianwei/Data/kitti/odometry/dataset/odometry/sequences/00/match'
+def read_feature_repo(file_path):
+    """Read feature file (*.sift)."""
+    with open(file_path, 'rb') as fin:
+        data = fin.read()
 
-sift_list_path = '/home/tianwei/Data/epfl/backup/entry-P10/out/preprocess/sift_list.txt'
-match_folder = '/home/tianwei/Data/epfl/backup/entry-P10/out/preprocess/match'
+    head_length = 20
+    head = data[0:head_length]
+    feature_name, _, num_features, loc_dim, des_dim = unpack('5i', head)
+    keypts_length = loc_dim * num_features * 4
+
+    if feature_name == ord('S') + (ord('I') << 8) + (ord('F') << 16) + (ord('T') << 24):
+        print(Notify.INFO, 'Reading SIFT file',
+              file_path, '#', num_features, Notify.ENDC)
+        desc_length = des_dim * num_features
+        desc_type = 'B'
+    elif feature_name == 21384864:  # L2Net
+        print(Notify.INFO, 'Reading L2NET file',
+              file_path, '#', num_features, Notify.ENDC)
+    else:
+        print(Notify.FAIL, 'Unknown feature type.', Notify.ENDC)
+        desc_length = des_dim * num_features * 4
+        desc_type = 'f'
+
+    keypts_data = data[head_length: head_length + keypts_length]
+    keypts = np.array(unpack('f' * loc_dim * num_features, keypts_data))
+    keypts = np.reshape(keypts, (num_features, loc_dim))
+
+    desc_data = data[head_length +
+                     keypts_length: head_length + keypts_length + desc_length]
+    desc = np.array(unpack(
+        desc_type * des_dim * num_features, desc_data))
+    desc = np.reshape(desc, (num_features, des_dim))
+    return keypts, desc
+
 
 def read_match_repo(mat_file):
     """Read .mat file and read matches
