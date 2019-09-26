@@ -10,6 +10,19 @@ Implementation of ICRA 2019 paper: [Beyond Photometric Loss for Self-Supervised 
 }
 ```
 
+#### Update (Sep-26, 19):
+We published an follow-up paper on this topic, whose updated loss terms have positive influence on the depth estimation performance. See [Self-Supervised Learning of Depth and Motion Under Photometric Inconsistency
+](https://arxiv.org/abs/1909.09115) for details.
+```
+@inproceedings{shen2019iccvw,  
+  title={Self-Supervised Learning of Depth and Motion Under Photometric Inconsistency},
+  author={Shen, Tianwei and Zhou, Lei and Luo, Zixin and Yao, Yao and Li, Shiwei and Zhang, Jiahui and Fang, Tian and Quan, Long},  
+  booktitle={International Conference on Computer Vision (ICCV) Workshops},  
+  year={2019},  
+  organization={IEEE}  
+}
+```
+
 # Environment
 This codebase is tested on Ubuntu 16.04 with Tensorflow 1.7 and CUDA 9.0.
 
